@@ -63,6 +63,7 @@ void CustomMono::InitMono() noexcept
         }
         else
         {
+            Util::CreateDirectories(Util::Prefpath("mono"));
             //LOGF_INFO("mono: %s", mono_get_runtime_build_info());
             //SystemAssembly = mono_domain_assembly_open(Domain, extensionAssembly.c_str());
             //if (!SystemAssembly) { 
@@ -332,10 +333,15 @@ void CustomMono::DrawUI() noexcept
     else
     {
         ImGui::Text("Mono: %s", mono_get_runtime_build_info());
+        if (ImGui::Button("Open script directory", ImVec2(-1.f, 0.f)))
+        {
+            Util::OpenFileExplorer(Util::Prefpath("mono"));
+        }
         if (ImGui::Button("Reload", ImVec2(-1.f, 0.f))) {
             ReloadScripts();
         }
         ImGui::Separator();
+        ImGui::TextUnformatted("Found scripts");
         for (auto& script : Scripts) {
             if (script.path.empty()) {
                 if (ImGui::Button(script.name.c_str(), ImVec2(-1.f, 0.f))) {
@@ -398,6 +404,10 @@ void CustomMono::DrawUI() noexcept
                             RunExtension(script.assembly);
                         }
                     }
+                }
+                else if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Right))
+                {
+                    Util::OpenUrl(script.path);
                 }
             }
         }
