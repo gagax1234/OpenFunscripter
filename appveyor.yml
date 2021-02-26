@@ -1,6 +1,7 @@
 branches:
   only:
   - master
+  - mono
 clone_folder: c:\projects\OpenFunscripter
 install:
    - git submodule update --init --recursive
