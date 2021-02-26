@@ -21,6 +21,7 @@ matrix:
 
 before_build:
 - ps: choco install -y -r --no-progress InnoSetup
+- ps: choco install -y -r --no-progress mono
 - ps: set PATH=%PATH%;"C:\\ProgramData\\chocolatey\\bin";"C:\\Program Files (x86)\\Inno Setup 6"
 - cmd: |-
     mkdir build
