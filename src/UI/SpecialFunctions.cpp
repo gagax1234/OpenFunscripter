@@ -14,13 +14,20 @@
 #include "SDL_thread.h"
 #include "SDL_atomic.h"
 
+#ifdef OFS_MONO_SUPPORT
+#include "SpecialFunctionsMono.h"
+#endif
+
 SpecialFunctionsWindow::SpecialFunctionsWindow() noexcept
 {
+    OpenFunscripter::ptr->settings->data().currentSpecialFunction = 
+        (SpecialFunctions)(OpenFunscripter::ptr->settings->data().currentSpecialFunction % SpecialFunctions::TOTAL_FUNCTIONS_COUNT);
     SetFunction((SpecialFunctions)OpenFunscripter::ptr->settings->data().currentSpecialFunction);
 }
 
 void SpecialFunctionsWindow::SetFunction(SpecialFunctions functionEnum) noexcept
 {
+    functionEnum = (SpecialFunctions)(functionEnum % SpecialFunctions::TOTAL_FUNCTIONS_COUNT);
 	switch (functionEnum) {
 	case SpecialFunctions::RANGE_EXTENDER:
 		function = std::make_unique<FunctionRangeExtender>();
@@ -31,6 +38,11 @@ void SpecialFunctionsWindow::SetFunction(SpecialFunctions functionEnum) noexcept
     case SpecialFunctions::CUSTOM_LUA_FUNCTIONS:
         function = std::make_unique<CustomLua>();
         break;
+#ifdef OFS_MONO_SUPPORT
+    case SpecialFunctions::CUSTOM_MONO_FUNCTIONS:
+        function = std::make_unique<CustomMono>();
+        break;
+#endif
 	default:
 		break;
 	}
@@ -45,6 +57,9 @@ void SpecialFunctionsWindow::ShowFunctionsWindow(bool* open) noexcept
         "Range extender\0"
         "Simplify (Ramer-Douglas-Peucker)\0"
         "Custom functions\0"
+#ifdef OFS_MONO_SUPPORT
+        "Custom functions (mono)\0"
+#endif
         "\0")) {
         SetFunction((SpecialFunctions)OpenFunscripter::ptr->settings->data().currentSpecialFunction);
     }

@@ -38,6 +38,7 @@ static std::array<const std::string, (int32_t)StateType::TOTAL_UNDOSTATE_TYPES> 
 
 	"Simplify",
 	"Lua script",
+	"Mono (C#)",
 };
 
 const std::string& ScriptState::Message() const

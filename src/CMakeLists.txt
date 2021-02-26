@@ -22,6 +22,9 @@ set(OPEN_FUNSCRIPTER_SOURCES
 
 if(WIN32)
 	set(OPEN_FUNSCRIPTER_SOURCES ${OPEN_FUNSCRIPTER_SOURCES} "../icon.rc")
+	if(MONO_SUPPORT)
+		set(OPEN_FUNSCRIPTER_SOURCES ${OPEN_FUNSCRIPTER_SOURCES} "UI/SpecialFunctionsMono.cpp")
+	endif(MONO_SUPPORT)
 endif()
 
 if(APPLE)
@@ -47,6 +50,13 @@ if(WIN32)
 	add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                    "${CMAKE_SOURCE_DIR}/lib/libmpv/mpv-1.dll" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/mpv-1.dll")
+
+	if(MONO_SUPPORT)
+		target_compile_definitions(${PROJECT_NAME} PUBLIC "OFS_MONO_SUPPORT=1")
+		target_include_directories(${PROJECT_NAME} PUBLIC "C:/Program Files/Mono/include/mono-2.0")
+		target_link_directories(${PROJECT_NAME} PUBLIC "C:/Program Files/Mono/lib")
+		target_link_libraries(${PROJECT_NAME} PUBLIC "libmono-static-sgen.lib" "mono-2.0-sgen.lib" "MonoPosixHelper.lib" "bcrypt.lib")
+	endif(MONO_SUPPORT)
 endif()
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
@@ -64,6 +74,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # c++17
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+
 
 if(WIN32)
 	# target_compile_options(${PROJECT_NAME} PRIVATE /W2 /WX)

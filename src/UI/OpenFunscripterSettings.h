@@ -70,6 +70,17 @@ private:
 			}
 		} heatmapSettings;
 
+#ifdef OFS_MONO_SUPPORT
+		struct MonoScriptingSettings
+		{
+			std::string MonoPath = "C:\\Program Files\\Mono\\";
+			template <class Archive>
+			inline void reflect(Archive& ar) {
+				OFS_REFLECT(MonoPath, ar)
+			}
+		} monoSettings;
+#endif
+
 		std::vector<RecentFile> recentFiles;
 		ScriptSimulator::SimulatorSettings* simulator;
 		template <class Archive>
@@ -106,6 +117,10 @@ private:
 			OFS_REFLECT(show_tcode, ar);
 			OFS_REFLECT_PTR(simulator, ar);
 			OFS_REFLECT_NAMED("SplineMode", BaseOverlay::SplineMode, ar);
+
+#ifdef OFS_MONO_SUPPORT
+			OFS_REFLECT(monoSettings, ar);
+#endif
 		}
 	} scripterSettings;
 
