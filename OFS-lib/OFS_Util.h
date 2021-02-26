@@ -204,10 +204,13 @@ public:
 	static int OpenFileExplorer(const std::string& path);
 	static int OpenUrl(const std::string& url);
 
-	inline static std::filesystem::path Basepath() noexcept {
+	inline static std::filesystem::path Basepath(const char* append = nullptr) noexcept {
 		char* base = SDL_GetBasePath();
 		std::filesystem::path path(base);
 		SDL_free(base);
+		
+		if (append) path /= append;
+
 		return path;
 	}
 

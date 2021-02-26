@@ -33,7 +33,7 @@ build:
   verbosity: minimal
   parallel: true
 
-cache:
+#cache:
 # - lib\
 
 after_build:

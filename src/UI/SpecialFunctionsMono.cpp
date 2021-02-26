@@ -354,7 +354,7 @@ void CustomMono::DrawUI() noexcept
                     auto compilerPath = ss.str();
                     ss.str("");
 
-                    auto extensionSourcePath = Util::Prefpath("mono\\OFS_Internal\\OFS_ExtensionBase.cs");
+                    auto extensionSourcePath = Util::Basepath("data\\mono\\OFS_ExtensionBase.cs").u8string();
                     ss << "-out:" << script.assembly;
                     auto outFile = ss.str();
 
